@@ -1,4 +1,4 @@
-openapi: 3.0.1
+openapi: 3.1.0
 info:
   title: Reddit-like Web Application API
   description: API for a web application similar to Reddit, allowing users to post content, comment, and interact with each other.
@@ -82,25 +82,6 @@ paths:
         '204':
           description: User deleted successfully
           
-  /users/{userId}/posts:
-    get:
-      summary: Get all posts
-      parameters:
-        - name: userId
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: A list of posts
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Post'
-                  
   /users/{userId}/comments:
     get:
       summary: Get comments made by specified user
@@ -198,25 +179,6 @@ paths:
         '204':
           description: Community deleted successfully
                 
-  /communities/{communityId}/posts:
-    get:
-      summary: Get all posts
-      parameters:
-        - name: communityId
-          in: path
-          required: true
-          schema:
-            type: integer
-      responses:
-        '200':
-          description: A list of posts
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Post'
-  
   /posts:
     get:
       summary: Get all posts
@@ -311,19 +273,6 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/Comment'
-  
-  /comments:
-    get:
-      summary: Get comments for a post
-      responses:
-        '200':
-          description: List of all comments
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: '#/components/schemas/Comment'
     post:
       summary: Create a comment
       requestBody:
@@ -339,11 +288,54 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Comment'
+
+  /posts?{communityId}:
+    get:
+      summary: Get all posts in a community
+      parameters:
+        - name: communityId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+
+  /users/{userId}/posts:
+    get:
+      summary: Get posts made by specified user
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A list of posts
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
                 
-  /comments/{commentId}:
+  /posts/{postId}/comments/{commentId}:
     get:
       summary: Get a comment by id
       parameters:
+        - name: postId
+          in: path
+          required: true
+          schema:
+            type: integer
         - name: commentId
           in: path
           required: true
@@ -361,6 +353,11 @@ paths:
     put:
       summary: Update a comment
       parameters:
+        - name: postId
+          in: path
+          required: true
+          schema:
+            type: integer
         - name: commentId
           in: path
           required: true
@@ -382,6 +379,11 @@ paths:
     delete:
       summary: Delete a comment
       parameters:
+        - name: postId
+          in: path
+          required: true
+          schema:
+            type: integer
         - name: commentId
           in: path
           required: true
@@ -398,64 +400,83 @@ components:
       properties:
         id:
           type: integer
+          readOnly: true
         title:
           type: string
           example: "My First Post"
         content:
           type: string
           example: "This is the content of my first post."
-        author:
-          $ref: '#/components/schemas/User'
-        community:
-          $ref: '#/components/schemas/Community'
+        authorId:
+          type: string
+          readOnly: true
+        communityId:
+          type: integer
+          readOnly: true
         createdAt:
           type: string
           format: date-time
+          readOnly: true
 
     Comment:
       type: object
       properties:
         id:
           type: integer
+          readOnly: true
         content:
           type: string
-        post:
-          $ref: '#/components/schemas/Post'
-        author:
-          $ref: '#/components/schemas/User'
+        authorId:
+          type: integer
+          readOnly: true
         createdAt:
           type: string
           format: date-time
+          readOnly: true
     
     User:
       type: object
       properties:
         id:
           type: integer
+          readOnly: true
         username:
+          type: string
+          readOnly: true
+        password_hash:
           type: string
         createdAt:
           type: string
           format: date-time
-        comments:
-          $ref: '#/components/schemas/Comment'
-        posts:
-          $ref: '#/components/schemas/Post'
-          
+          readOnly: true
+
     Community:
       type: object
       properties:
         id:
           type: integer
+          readOnly: true
         name:
           type: string
+        description:
+          type: string
         number_of_members:
+          readOnly: true
           type: integer
         createdAt:
           type: string
           format: date-time
+          readOnly: true
         members:
           $ref: '#/components/schemas/User'
+          readOnly: true
+          type:
+            - 'null'
+            - object
         posts:
           $ref: '#/components/schemas/Post'
+          readOnly: true
+          type:
+            - 'null'
+            - object
   
