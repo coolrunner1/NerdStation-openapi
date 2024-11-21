@@ -50,7 +50,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
     put:
-      summary: Update an existing user
+      summary: Update user's password
       parameters:
         - name: userId
           in: path
