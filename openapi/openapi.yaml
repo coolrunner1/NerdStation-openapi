@@ -8,6 +8,8 @@ paths:
   /users:
     get:
       summary: Get all users
+      tags:
+        - users
       responses:
         '200':
           description: A list of users
@@ -19,6 +21,8 @@ paths:
                   $ref: '#/components/schemas/User'
     post:
       summary: Create a new user
+      tags:
+        - users
       requestBody:
         required: true
         content:
@@ -36,6 +40,8 @@ paths:
   /users/{userId}:
     get:
       summary: Get user by ID
+      tags:
+        - users
       parameters:
         - name: userId
           in: path
@@ -51,6 +57,8 @@ paths:
                 $ref: '#/components/schemas/User'
     put:
       summary: Update user's password
+      tags:
+        - users
       parameters:
         - name: userId
           in: path
@@ -72,25 +80,29 @@ paths:
                 $ref: '#/components/schemas/User'
     delete:
       summary: Delete a user
+      tags:
+        - users
       parameters:
         - name: userId
           in: path
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         '204':
           description: User deleted successfully
           
-  /users/{userId}/comments:
+  /comments?{userId}:
     get:
       summary: Get comments made by specified user
+      tags:
+        - comments
       parameters:
         - name: userId
           in: path
           required: true
           schema:
-            type: string
+            type: integer
       responses:
         '200':
           description: List of comments
@@ -104,6 +116,8 @@ paths:
   /communities:
     get:
       summary: Get all communities
+      tags:
+        - communities
       responses:
         '200':
           description: A list of communities
@@ -115,6 +129,8 @@ paths:
                   $ref: '#/components/schemas/Community'
     post:
       summary: Create a new community
+      tags:
+        - communities
       requestBody:
         required: true
         content:
@@ -132,6 +148,8 @@ paths:
   /communities/{communityId}:
     get:
       summary: Get community by ID
+      tags:
+        - communities
       parameters:
         - name: communityId
           in: path
@@ -148,6 +166,8 @@ paths:
                   $ref: '#/components/schemas/Community'
     put:
       summary: Update an existing community
+      tags:
+        - communities
       parameters:
         - name: communityId
           in: path
@@ -169,6 +189,8 @@ paths:
                 $ref: '#/components/schemas/Community'
     delete:
       summary: Delete a community
+      tags:
+        - communities
       parameters:
         - name: communityId
           in: path
@@ -182,6 +204,8 @@ paths:
   /posts:
     get:
       summary: Get all posts
+      tags:
+        - posts
       responses:
         '200':
           description: Post details
@@ -191,6 +215,8 @@ paths:
                 $ref: '#/components/schemas/Post'
     post:
       summary: Create a new post
+      tags:
+        - posts
       requestBody:
         required: true
         content:
@@ -208,6 +234,8 @@ paths:
   /posts/{postId}:
     get:
       summary: Get post by ID
+      tags:
+        - posts
       parameters:
         - name: postId
           in: path
@@ -224,6 +252,8 @@ paths:
                 
     put:
       summary: Update an existing post
+      tags:
+        - posts
       parameters:
         - name: postId
           in: path
@@ -245,6 +275,8 @@ paths:
                 $ref: '#/components/schemas/Post'
     delete:
       summary: Delete a post
+      tags:
+        - posts
       parameters:
         - name: postId
           in: path
@@ -258,6 +290,8 @@ paths:
   /posts/{postId}/comments:
     get:
       summary: Get comments for a post
+      tags:
+        - posts
       parameters:
         - name: postId
           in: path
@@ -275,6 +309,8 @@ paths:
                   $ref: '#/components/schemas/Comment'
     post:
       summary: Create a comment
+      tags:
+        - posts
       requestBody:
         required: true
         content:
@@ -289,9 +325,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/Comment'
 
-  /posts?{communityId}:
+  /posts/{communityId}:
     get:
       summary: Get all posts in a community
+      tags:
+        - posts
       parameters:
         - name: communityId
           in: path
@@ -308,9 +346,11 @@ paths:
                 items:
                   $ref: '#/components/schemas/Post'
 
-  /users/{userId}/posts:
+  /posts?{userId}:
     get:
       summary: Get posts made by specified user
+      tags:
+        - posts
       parameters:
         - name: userId
           in: path
@@ -329,7 +369,9 @@ paths:
                 
   /posts/{postId}/comments/{commentId}:
     get:
-      summary: Get a comment by id
+      summary: Get a comment by id in a post
+      tags:
+        - comments
       parameters:
         - name: postId
           in: path
@@ -351,7 +393,9 @@ paths:
                 items:
                   $ref: '#/components/schemas/Comment'
     put:
-      summary: Update a comment
+      summary: Update a comment in a post
+      tags:
+        - comments
       parameters:
         - name: postId
           in: path
@@ -378,6 +422,8 @@ paths:
                 $ref: '#/components/schemas/Comment'
     delete:
       summary: Delete a comment
+      tags:
+        - comments
       parameters:
         - name: postId
           in: path
@@ -392,6 +438,92 @@ paths:
       responses:
         '204':
           description: Comment deleted successfully
+
+  /users/{userId}/communities:
+    get:
+      summary: Get communities that the user is subscribed to
+      tags:
+        - communities
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of user's subscriptions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Community'
+
+  /users/{userId}/communities/communityId:
+    post:
+      summary: Subscribe to the community
+      tags:
+        - communities
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: communityId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '201':
+          description: Subscribed to the community successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Community'
+    delete:
+      summary: Unsubscribe from the community
+      tags:
+        - communities
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+        - name: communityId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Unsubscribed from the community successfully
+
+
+  /communities/{communityId}/users:
+    get:
+      summary: Get community subscribers
+      tags:
+        - communities
+      parameters:
+        - name: communityId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: List of community's subscriptions
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Community'
+
 
 components:
   schemas:
@@ -412,7 +544,6 @@ components:
           readOnly: true
         communityId:
           type: integer
-          readOnly: true
         createdAt:
           type: string
           format: date-time
@@ -429,6 +560,8 @@ components:
         authorId:
           type: integer
           readOnly: true
+        postId:
+            type: integer
         createdAt:
           type: string
           format: date-time
@@ -442,13 +575,24 @@ components:
           readOnly: true
         username:
           type: string
-          readOnly: true
         password_hash:
           type: string
+          writeOnly: true
         createdAt:
           type: string
           format: date-time
           readOnly: true
+
+    UserCommunity:
+        type: object
+        properties:
+            id:
+                type: integer
+                readonly: true
+            userId:
+                type: integer
+            communityId:
+                type: integer
 
     Community:
       type: object
@@ -473,10 +617,3 @@ components:
           type:
             - 'null'
             - object
-        posts:
-          $ref: '#/components/schemas/Post'
-          readOnly: true
-          type:
-            - 'null'
-            - object
-  
