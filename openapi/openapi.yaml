@@ -92,7 +92,7 @@ paths:
         '204':
           description: User deleted successfully
           
-  /comments?{userId}:
+  /user/{userId}/comments:
     get:
       summary: Get comments made by specified user
       tags:
