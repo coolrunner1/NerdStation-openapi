@@ -346,7 +346,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Post'
 
-  /posts?{userId}:
+  /user/{userId}/posts:
     get:
       summary: Get posts made by specified user
       tags:
