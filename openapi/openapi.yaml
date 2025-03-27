@@ -696,6 +696,10 @@ paths:
           in: query
           schema:
             type: integer
+        - name: categoryAllOf
+          in: query
+          schema:
+            type: array
         - name: tagsOneOf
           in: query
           schema:
@@ -774,6 +778,10 @@ paths:
           in: query
           schema:
             type: integer
+        - name: categoryAllOf
+          in: query
+          schema:
+            type: array
         - name: tagsOneOf
           in: query
           schema:
