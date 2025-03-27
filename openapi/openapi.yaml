@@ -5,11 +5,20 @@ info:
   version: 1.0.0
 
 paths:
-  /users:
+  /api/v1/users:
     get:
       summary: Get all users
       tags:
         - users
+      parameters:
+        - name: start
+          in: query
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          schema:
+            type: integer
       responses:
         '200':
           description: A list of users
@@ -37,7 +46,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
 
-  /users/{userId}:
+  /api/v1/users/{userId}:
     get:
       summary: Get user by ID
       tags:
@@ -92,7 +101,7 @@ paths:
         '204':
           description: User deleted successfully
           
-  /user/{userId}/comments:
+  /api/v1/user/{userId}/comments:
     get:
       summary: Get comments made by specified user
       tags:
@@ -101,6 +110,14 @@ paths:
         - name: userId
           in: path
           required: true
+          schema:
+            type: integer
+        - name: start
+          in: query
+          schema:
+            type: integer
+        - name: limit
+          in: query
           schema:
             type: integer
       responses:
@@ -113,11 +130,20 @@ paths:
                 items:
                   $ref: '#/components/schemas/Comment'
           
-  /communities:
+  /api/v1/communities:
     get:
       summary: Get all communities
       tags:
         - communities
+      parameters:
+        - name: start
+          in: query
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          schema:
+            type: integer
       responses:
         '200':
           description: A list of communities
@@ -145,7 +171,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Community'
   
-  /communities/{communityId}:
+  /api/v1/communities/{communityId}:
     get:
       summary: Get community by ID
       tags:
@@ -201,11 +227,20 @@ paths:
         '204':
           description: Community deleted successfully
                 
-  /posts:
+  /api/v1/posts:
     get:
       summary: Get all posts
       tags:
         - posts
+      parameters:
+        - name: start
+          in: query
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          schema:
+            type: integer
       responses:
         '200':
           description: Post details
@@ -231,7 +266,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Post'
   
-  /posts/{postId}:
+  /api/v1/posts/{postId}:
     get:
       summary: Get post by ID
       tags:
@@ -287,7 +322,7 @@ paths:
         '204':
           description: Post deleted successfully
   
-  /posts/{postId}/comments:
+  /api/v1/posts/{postId}/comments:
     get:
       summary: Get comments for a post
       tags:
@@ -296,6 +331,14 @@ paths:
         - name: postId
           in: path
           required: true
+          schema:
+            type: integer
+        - name: start
+          in: query
+          schema:
+            type: integer
+        - name: limit
+          in: query
           schema:
             type: integer
       responses:
@@ -325,7 +368,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/Comment'
 
-  /community/{communityId}/posts:
+  /api/v1/community/{communityId}/posts:
     get:
       summary: Get all posts in a community
       tags:
@@ -334,6 +377,14 @@ paths:
         - name: communityId
           in: path
           required: true
+          schema:
+            type: integer
+        - name: start
+          in: query
+          schema:
+            type: integer
+        - name: limit
+          in: query
           schema:
             type: integer
       responses:
@@ -346,7 +397,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Post'
 
-  /user/{userId}/posts:
+  /api/v1/user/{userId}/posts:
     get:
       summary: Get posts made by specified user
       tags:
@@ -355,6 +406,14 @@ paths:
         - name: userId
           in: path
           required: true
+          schema:
+            type: integer
+        - name: start
+          in: query
+          schema:
+            type: integer
+        - name: limit
+          in: query
           schema:
             type: integer
       responses:
@@ -367,7 +426,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Post'
                 
-  /posts/{postId}/comments/{commentId}:
+  /api/v1/posts/{postId}/comments/{commentId}:
     get:
       summary: Get a comment by id in a post
       tags:
@@ -439,7 +498,7 @@ paths:
         '204':
           description: Comment deleted successfully
 
-  /users/{userId}/communities:
+  /api/v1/users/{userId}/communities:
     get:
       summary: Get communities that the user is subscribed to
       tags:
@@ -448,6 +507,14 @@ paths:
         - name: userId
           in: path
           required: true
+          schema:
+            type: integer
+        - name: start
+          in: query
+          schema:
+            type: integer
+        - name: limit
+          in: query
           schema:
             type: integer
       responses:
@@ -460,7 +527,7 @@ paths:
                 items:
                   $ref: '#/components/schemas/Community'
 
-  /users/{userId}/communities/{communityId}:
+  /api/v1/users/{userId}/communities/{communityId}:
     post:
       summary: Subscribe to the community
       tags:
@@ -503,7 +570,7 @@ paths:
           description: Unsubscribed from the community successfully
 
 
-  /communities/{communityId}/users:
+  /api/v1/communities/{communityId}/users:
     get:
       summary: Get community subscribers
       tags:
@@ -514,16 +581,220 @@ paths:
           required: true
           schema:
             type: integer
+        - name: start
+          in: query
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          schema:
+            type: integer
       responses:
         '200':
-          description: List of community's subscriptions
+          description: List of community's subscribers
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+  /api/v1/categories:
+    get:
+      summary: Get all categories
+      tags:
+        - categories
+      responses:
+        '200':
+          description: List of categories
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Category'
+    post:
+      summary: Create a new category
+      tags:
+        - categories
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+      responses:
+        '201':
+          description: Category created successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+
+
+  /api/v1/categories/{categoryId}:
+    get:
+      summary: Get category
+      tags:
+        - categories
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Category
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+    put:
+      summary: Update category
+      tags:
+        - categories
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Category'
+      responses:
+        '200':
+          description: Category updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Category'
+
+  /api/v1/search/posts:
+    get:
+      summary: Search posts
+      tags:
+        - search
+      parameters:
+        - name: search
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: start
+          in: query
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          schema:
+            type: integer
+        - name: categoryOneOf
+          in: query
+          schema:
+            type: integer
+        - name: tagsOneOf
+          in: query
+          schema:
+            type: string
+        - name: tagsAllOf
+          in: query
+          schema:
+            type: array
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum: ["name", "createdAt", "views", "likes", "-name", "-createdAt", "-views", "-likes"]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Post'
+
+  /api/v1/search/users:
+    get:
+      summary: Search users
+      tags:
+        - search
+      parameters:
+        - name: search
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: start
+          in: query
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          schema:
+            type: integer
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum: ["name", "createdAt", "numberOfPosts", "numberOfComments",  "-name", "-createdAt", "-numberOfPosts", "-numberOfComments"]
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+
+  /api/v1/search/communities:
+    get:
+      summary: Search communities
+      tags:
+        - search
+      parameters:
+        - name: search
+          in: query
+          required: true
+          schema:
+            type: string
+        - name: start
+          in: query
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          schema:
+            type: integer
+        - name: categoryOneOf
+          in: query
+          schema:
+            type: integer
+        - name: tagsOneOf
+          in: query
+          schema:
+            type: string
+        - name: tagsAllOf
+          in: query
+          schema:
+            type: array
+        - name: sort
+          in: query
+          schema:
+            type: string
+            enum: ["name", "createdAt", "numberOfPosts", "numberOfMembers",  "-name", "-createdAt", "-numberOfPosts", "-numberOfMembers"]
+      responses:
+        '200':
           content:
             application/json:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/Community'
-
 
 components:
   schemas:
@@ -543,6 +814,20 @@ components:
           type: string
           readOnly: true
         communityId:
+          type: integer
+        images:
+          $ref: '#/components/schemas/Image'
+          type: ['null', array]
+        categories:
+          ref: '#/components/schemas/Category'
+          type: array
+        tags:
+          type: array
+        views:
+          type: integer
+        likes:
+          type: integer
+        dislikes:
           type: integer
         createdAt:
           type: string
@@ -579,6 +864,19 @@ components:
         password:
           type: string
           writeOnly: true
+        description:
+          type: ['null', string]
+        avatarUrl:
+          type: ['null', string]
+        banner:
+          $ref: '#/components/schemas/Image'
+          type: ['null', object]
+        numberOfPosts:
+          readOnly: true
+          type: integer
+        numberOfComments:
+          readOnly: true
+          type: integer
         createdAt:
           type: string
           format: date-time
@@ -587,13 +885,13 @@ components:
     UserCommunity:
         type: object
         properties:
-            id:
-                type: integer
-                readonly: true
-            userId:
-                type: integer
-            communityId:
-                type: integer
+          id:
+            type: integer
+            readonly: true
+          userId:
+            type: integer
+          communityId:
+            type: integer
 
     Community:
       type: object
@@ -605,16 +903,51 @@ components:
           type: string
         description:
           type: string
-        number_of_members:
+        numberOfMembers:
           readOnly: true
           type: integer
+        numberOfPosts:
+          readOnly: true
+          type: integer
+        avatarUrl:
+          type: ['null', string]
+        banner:
+          $ref: '#/components/schemas/Image'
+          type: ['null', object]
+        tags:
+          type: array
+        categories:
+          ref: '#/components/schemas/Category'
+          type: array
         createdAt:
           type: string
           format: date-time
           readOnly: true
-        members:
-          $ref: '#/components/schemas/User'
+
+    Image:
+      type: object
+      properties:
+        id:
+          type: integer
           readOnly: true
-          type:
-            - 'null'
-            - object
+        title:
+          type: string
+        alt:
+          type: string
+        description:
+          type: ['null', string]
+        imageUrl:
+          type: string
+        createdAt:
+          type: string
+          format: date-time
+          readOnly: true
+
+    Category:
+      type: object
+      properties:
+        id:
+          type: integer
+          readOnly: true
+        title:
+          type: string
