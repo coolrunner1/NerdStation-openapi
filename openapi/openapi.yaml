@@ -426,17 +426,12 @@ paths:
                 items:
                   $ref: '#/components/schemas/Post'
                 
-  /api/v1/posts/{postId}/comments/{commentId}:
+  /api/v1/comments/{commentId}:
     get:
-      summary: Get a comment by id in a post
+      summary: Get a comment by id
       tags:
         - comments
       parameters:
-        - name: postId
-          in: path
-          required: true
-          schema:
-            type: integer
         - name: commentId
           in: path
           required: true
@@ -452,15 +447,10 @@ paths:
                 items:
                   $ref: '#/components/schemas/Comment'
     put:
-      summary: Update a comment in a post
+      summary: Update a comment
       tags:
         - comments
       parameters:
-        - name: postId
-          in: path
-          required: true
-          schema:
-            type: integer
         - name: commentId
           in: path
           required: true
@@ -484,11 +474,6 @@ paths:
       tags:
         - comments
       parameters:
-        - name: postId
-          in: path
-          required: true
-          schema:
-            type: integer
         - name: commentId
           in: path
           required: true
@@ -922,6 +907,12 @@ components:
         banner:
           $ref: '#/components/schemas/Image'
           type: ['null', object]
+        owner:
+          $ref: '#/components/schemas/User'
+          type: object
+        moderators:
+          $ref: '#/components/schemas/User'
+          type: ['null', array]
         tags:
           type: array
         categories:
