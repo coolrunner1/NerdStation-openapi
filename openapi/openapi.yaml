@@ -71,7 +71,7 @@ paths:
               schema:
                 $ref: '#/components/schemas/User'
     put:
-      summary: Update user's password
+      summary: Update user
       tags:
         - users
       parameters:
@@ -93,6 +93,25 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/User'
+    patch:
+      summary: Update user's password
+      tags:
+        - users
+      parameters:
+        - name: userId
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              password: string
+      responses:
+        '200':
+          description: Password updated successfully
     delete:
       summary: Delete a user
       tags:
@@ -692,6 +711,19 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/Category'
+    delete:
+      summary: Delete a category
+      tags:
+        - categories
+      parameters:
+        - name: categoryId
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '204':
+          description: Category deleted successfully
 
   /api/v1/search/posts:
     get:
@@ -863,7 +895,7 @@ components:
           $ref: '#/components/schemas/Image'
           type: ['null', array]
         categories:
-          ref: '#/components/schemas/Category'
+          $ref: '#/components/schemas/Category'
           type: array
         tags:
           type: array
@@ -896,6 +928,9 @@ components:
           type: string
           format: date-time
           readOnly: true
+        author:
+          $ref: '#/components/schemas/User'
+          type: object
     
     User:
       type: object
@@ -910,7 +945,7 @@ components:
           writeOnly: true
         description:
           type: ['null', string]
-        avatarUrl:
+        avatarPath:
           type: ['null', string]
         banner:
           $ref: '#/components/schemas/Image'
@@ -953,7 +988,7 @@ components:
         numberOfPosts:
           readOnly: true
           type: integer
-        avatarUrl:
+        avatarPath:
           type: ['null', string]
         banner:
           $ref: '#/components/schemas/Image'
@@ -966,9 +1001,12 @@ components:
           type: ['null', array]
         tags:
           type: array
+          items:
+            type: string
         categories:
-          ref: '#/components/schemas/Category'
           type: array
+          items:
+             $ref: '#/components/schemas/Category'
         createdAt:
           type: string
           format: date-time
@@ -986,7 +1024,7 @@ components:
           type: string
         description:
           type: ['null', string]
-        imageUrl:
+        imagePath:
           type: string
         createdAt:
           type: string
